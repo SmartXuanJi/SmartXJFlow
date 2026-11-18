@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 生成的流程总跑不起来？先看「运行前体检」这一页 · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="让 AI 画一条 20 节点的流程很容易，难的是它第一次就跑通。问题往往不在模型不够聪明，而在变量引用、必填配置与凭据这类确定性细节——这些恰恰不该靠&quot;再生成一次&quot;来碰运气。">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>AI 生成的流程总跑不起来？先看「运行前体检」这一页</h1><p>让 AI 画一条 20 节点的流程很容易，难的是它第一次就跑通。问题往往不在模型不够聪明，而在变量引用、必填配置与凭据这类<strong>确定性细节</strong>——这些恰恰不该靠"再生成一次"来碰运气。</p>
+<h2>生成阶段：先把结构约束住</h2>
+<p>做得比较稳的实现会分三步，而不是一把梭：</p>
+<ol>
+<li><strong>规划</strong>：先产出节点清单与连线，确定拓扑；</li>
+<li><strong>分组补配置</strong>：按节点类型分批补齐参数，避免一次性输出过长被截断；</li>
+<li><strong>组装</strong>：拼成完整流程，再做静态校验。</li>
+</ol>
+<p>关键约束是<strong>变量契约</strong>：每个节点必须声明 <code>inputs</code> / <code>outputs</code>，下游只能引用上游已声明的字段。这条规则把"引用了一个不存在的变量"从运行期错误提前到了生成期错误。</p>
+<h2>预检与试跑：把"会花钱的失败"变成"不花钱的失败"（专业版）</h2>
+<p>这三项属于专业版能力，也是"AI 生成流程"真正能落地的前提：</p>
+<ul>
+<li><strong>沙盒预检</strong>：副作用节点（写文件、发请求、写库）全部 Mock，零费用跑一遍结构；能提前发现连线错误、类型不匹配、必填项缺失。</li>
+<li><strong>样例数据真实试跑</strong>：用样例数据真跑一次，但<strong>不写执行记录、不写检查点、不计预算</strong>；失败也不留垃圾数据。</li>
+<li><strong>AI 增量修复</strong>：失败后是"修复失败节点 + 上游变量"，不是整条重画；修复会带出原因与改动点，用户可以逐项确认。</li>
+</ul>
+<p>免费版没有这三项，但<strong>运行前体检、一键修复、环境一键体检与失败自愈是免费可用的</strong>——也就是说"手工搭的流程会不会在运行前就知道跑不通"，免费版同样能用到。</p>
+<h2>运行前体检：把体检项变成可点的按钮</h2>
+<p>真正省时间的是这一步。体检按严重程度分级列出问题：</p>
+<ul>
+<li><strong>确定性无损项</strong>（如补默认迭代上限/超时）→ 提供「一键修复」，修完直接可运行；</li>
+<li><strong>需要人决策的</strong>（空模型、缺 AI 接口、必填输入没填）→ 给出可直接点的修复按钮，点了就跳到对应配置；</li>
+<li><strong>风险项</strong>（危险 SQL、高危代码、外部写操作）→ 分级提示，不阻止但不静默放行。</li>
+</ul>
+<p>通过后再按 F5 运行。这套流程的价值不是"保证成功"，而是<strong>把失败挡在花钱之前、把修复成本降到一次点击</strong>。</p>
+<h2>顺带说：环境也要体检</h2>
+<p>流程没问题，环境可能有问题。应用内「帮助 → 一键体检」覆盖四类：AI 接口连通性、本地模型、定时任务、流程结构。缺依赖、模型文件不完整、缺 ffmpeg 这类问题会给出"为什么 → 怎么修 → 去哪儿修"，而不是丢一句英文报错。</p>
+<h2>边界</h2>
+<ul>
+<li>体检与预检只能排除<strong>确定性</strong>问题，模型输出的不确定性仍然存在；</li>
+<li>沙盒预检用的是 Mock，真实文件与接口的权限问题要到试跑或正式运行才暴露；</li>
+<li>生成结果仍需人工确认，尤其是涉及写文件、发请求、动数据库的节点。</li>
+</ul>
+<h2>适合谁</h2>
+<p>个人和小团队通常没有专人 review 流程，靠的就是"生成 → 预检 → 体检 → 试跑"这条链把错误层层拦下来。</p>
+<p>免费版能用到的是：运行前体检（结构、变量引用、必填配置、凭据缺失、危险 SQL/高危代码分级）、一键修复、环境一键体检、失败自愈，以及 ≤10 节点 / 单接口的手工编排与批量运行；沙盒预检、样例真实试跑、AI 修复生成与全部节点类型属专业版。</p>
+<p><a href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a></p>
+<p><em>本文按 v2027.1.0 功能说明撰写；具体菜单以应用内显示为准。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>

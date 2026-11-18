@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>换电脑不丢流程：拷贝数据目录（附必须带走的清单） · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="事实依据：数据目录 = 应用目录（config.py 的 DATA_DIR 固定为应用根目录）；知识库/经验库/执行记录在 smartxjflow.db；定时任务与 MCP/A…">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>换电脑不丢流程：拷贝数据目录（附必须带走的清单）</h1><blockquote>
+<p>事实依据：数据目录 = 应用目录（<code>config.py</code> 的 <code>DATA_DIR</code> 固定为应用根目录）；知识库/经验库/执行记录在 <code>smartxjflow.db</code>；定时任务与 MCP/A2A 配置在同目录的 JSON；授权文件用机器码加密，跨机必然失效。</p>
+</blockquote>
+<p>换机最省事的做法不是逐条导出流程，而是<strong>退出应用后把数据文件拷到新机的同一位置</strong>。比逐条导出更完整——知识库、经验库、执行记录、定时任务、MCP 配置全都一起走，不用重建。</p>
+<h2>一句话流程</h2>
+<ol>
+<li><strong>旧机</strong>：完全退出应用 → 拷贝下面「必须带走」的文件与目录；</li>
+<li><strong>新机</strong>：解压<strong>不低于旧机</strong>的版本 → 放回应用目录的同名位置 → 首次启动自动升级数据库结构 → 重新登录账号。</li>
+</ol>
+<h2>一、必须带走的清单</h2>
+<p>路径都相对于<strong>应用目录</strong>（<code>SmartXJFlow.exe</code> 所在目录）。</p>
+<table>
+<thead>
+<tr>
+<th>文件 / 目录</th>
+<th>里面是什么</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>smartxjflow.db</code> + <code>smartxjflow.db-wal</code> + <code>smartxjflow.db-shm</code></td>
+<td>流程、执行记录、知识库、经验库、AI 接口与加密凭据</td>
+<td><strong>三个文件必须一起拷</strong>：WAL 里可能还有未合并的最新写入，只拷 <code>.db</code> 会丢最近的改动</td>
+</tr>
+<tr>
+<td><code>config.json</code></td>
+<td>设置、主密码状态（salt / 验证哈希）、SMTP、路径与日志配置</td>
+<td>必须与 db 一起走，否则加密凭据解不开，要重新填 API Key</td>
+</tr>
+<tr>
+<td><code>schedules.json</code>、<code>schedule_state.json</code>、<code>schedule_missed_notice.json</code></td>
+<td>定时任务规则与执行状态</td>
+<td>一起拷，定时任务不用重建</td>
+</tr>
+<tr>
+<td><code>mcp_servers.json</code>、<code>a2a_agents.json</code></td>
+<td>MCP Server 与 A2A 智能体配置</td>
+<td>命令行参数里的本机路径需要检查</td>
+</tr>
+<tr>
+<td><code>workflow_meta.json</code></td>
+<td>流程列表附加元信息</td>
+<td>小文件</td>
+</tr>
+<tr>
+<td><code>ai_assistant_conversations.json</code>、<code>snippets.json</code></td>
+<td>助手会话、代码片段</td>
+<td>不需要可跳过</td>
+</tr>
+<tr>
+<td><code>team_templates/</code></td>
+<td>团队模板目录</td>
+<td>没用过就没有</td>
+</tr>
+<tr>
+<td><code>batch_archive/</code>、<code>batch_checkpoints/</code></td>
+<td>批量结果归档、断点续跑检查点</td>
+<td>体积随使用增长，只带需要的</td>
+</tr>
+<tr>
+<td><code>folder_watch/</code>、<code>drafts/</code>、<code>output/</code></td>
+<td>监听状态、草稿、默认输出</td>
+<td>输出目录若指向别处，按实际路径拷</td>
+</tr>
+<tr>
+<td><code>vad/</code>、<code>notifications/</code></td>
+<td>VAD 模型、通知历史</td>
+<td>不用语音可跳过</td>
+</tr>
+</tbody>
+</table>
+<h2>二、不要带走的</h2>
+<table>
+<thead>
+<tr>
+<th>文件 / 目录</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>license.json</code>、<code>license_cookies.json</code></td>
+<td>用<strong>本机机器码派生密钥加密</strong>，换机必然解不开，会被自动视为未登录——直接跳过，新机重新登录</td>
+</tr>
+<tr>
+<td><code>resources/</code></td>
+<td>程序资源 + <strong>本地模型权重</strong>（可能十几 GB），不要整体覆盖新机目录；模型按需重新下载</td>
+</tr>
+<tr>
+<td><code>extensions/</code></td>
+<td>运行时依赖，按需下载；跨机拷贝容易出现半截包</td>
+</tr>
+<tr>
+<td><code>update/</code></td>
+<td>升级暂存与回滚文件，可再生成</td>
+</tr>
+<tr>
+<td><code>*.log</code>、<code>smartxjflow*.log</code></td>
+<td>日志，不必占用迁移体积</td>
+</tr>
+<tr>
+<td>程序本体（exe、<code>_internal/</code> 等）</td>
+<td>新机直接解压新版本更稳，也避免旧程序打不开新库</td>
+</tr>
+</tbody>
+</table>
+<h2>三、四个坑</h2>
+<ol>
+<li><strong>漏拷 <code>-wal</code></strong>：最容易踩。WAL 文件里还有未合并的写入，只拷 <code>smartxjflow.db</code> 会丢最近的改动；</li>
+<li><strong>停不干净</strong>：应用还在后台跑就拷，等于拷了个旧快照；</li>
+<li><strong>授权不会跟着走</strong>：这是设计如此（防止整目录拷贝复用账号），新机重新登录即可；</li>
+<li><strong>路径不会自动改</strong>：默认保存路径、流程里文件/文件夹节点的绝对路径、文件夹监听目录都要检查，否则会报"找不到文件"。</li>
+</ol>
+<h2>四、到了新机再做三件事</h2>
+<ol>
+<li>启动一次，让数据库自动迁移到当前版本；访问凭据时输入旧机的主密码；</li>
+<li>在「设置 → 账户与授权」登录账号、登记新设备、清掉不再使用的旧设备；</li>
+<li>跑「运行前体检」+ 一条最简单的流程，确认接口连通、依赖与本地模型按需下载。</li>
+</ol>
+<h2>五、只想交给同事一条流程？</h2>
+<p>那就别搬目录：用「文件 → 导出」导出单条流程（普通 JSON 或分享包，导出默认勾选脱敏），或用应用内「只读分享链接」——本机 HTTP + 一次性令牌、默认 10 分钟、页面只读无导入入口、无活链接即关端口、默认仅局域网，页面只给节点结构，不含提示词、SQL、密钥与输入默认值。小团队共用还能用「团队模板目录」（仅局域网、服务端只读、提交需审核）。</p>
+<h2>六、一条容易忽略的边界</h2>
+<p>云同步以分享包为载荷，按 <code>workflow_id / updated_at / version</code> 判冲突。它是<strong>流程分发</strong>，不是整机备份：知识库、执行记录、设置与授权不会跟着同步。别把"我开了云同步"当成换机备份。</p>
+<p><em>本文按 v2027.1.0 的存储结构撰写；具体菜单名称以应用内显示为准。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>

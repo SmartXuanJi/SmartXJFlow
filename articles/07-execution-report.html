@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>把执行记录整理成一份能交给老板看的报告 · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="跑了几百次自动化，老板只问一句「这东西到底省了什么」。截图和日志都交不出去，需要的是一份有口径、能校验的说明。">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>把执行记录整理成一份能交给老板看的报告</h1><p>跑了几百次自动化，老板只问一句「这东西到底省了什么」。截图和日志都交不出去，需要的是一份<strong>有口径、能校验</strong>的说明。</p>
+<h2>先有记录，才有报告</h2>
+<p>执行记录里存的是：状态、触发来源（手动/定时/批量/API/表单…）、每一步的输入输出摘要、耗时与 Token。没有这些，任何"省了多少"都是拍脑袋。</p>
+<p>在此基础上，四个视图各回答一个问题：</p>
+<table>
+<thead>
+<tr>
+<th>视图</th>
+<th>回答什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运行洞察</td>
+<td>哪一步最慢、最贵？耗时/Token/成本 Top5 + 按拓扑层的甘特图，能看出并行层与瓶颈</td>
+</tr>
+<tr>
+<td>用量看板</td>
+<td>这段时间用了多少？按流程与模型排行、与预算对比（近 7 / 30 天）</td>
+</tr>
+<tr>
+<td>费用预估</td>
+<td>下次大概花多少？按历史给 P10–P90 区间；没有历史就如实说"没有依据"</td>
+</tr>
+<tr>
+<td>健康周报</td>
+<td>自动化还在跑吗？每周汇总运行次数、成功率、费用与待处理问题</td>
+</tr>
+</tbody>
+</table>
+<h2>交出去的三层材料</h2>
+<ol>
+<li><strong>结果文件</strong>：结果页支持导出 TXT / Markdown / JSON / CSV / Word / Excel / PDF 七种格式，按接收方习惯选；</li>
+<li><strong>一页摘要</strong>：健康周报那段可以直接转发的 Markdown 卡片，适合贴到群里或写进周报；</li>
+<li><strong>审计证据包（摘要版，专业版）</strong>：不含提示词与输出原文，仍带 <code>manifest.json</code> 的逐文件 SHA-256 与整包指纹，可重算校验；报告页有人读结论、类别分布与打印样式。</li>
+</ol>
+<p>需要完整证据（含提示词与输出）时再显式勾选「包含原文」——这会产生留痕，属于合规动作，不要默认打开。</p>
+<h2>三个必须说清的口径</h2>
+<ul>
+<li>执行记录、运行洞察、用量看板与费用预估在免费版即可使用；<strong>审计证据包、操作审计日志与高级导出（Word/Excel/PDF）属专业版</strong>，Word/Excel/PDF 之外的基础导出免费；</li>
+<li><strong>预算只覆盖 AI token 费用</strong>，不包含你自己的服务器、网盘、第三方 API；</li>
+<li><strong>MCP / A2A 等外部调用只记录次数，不折算金额</strong>，也不进入预算熔断——对外报数时不要把它们算成钱；</li>
+<li><strong>摘要版 ≠ 完整证据包</strong>，它证明"这次跑过、结果可校验"，但不足以做法律取证。</li>
+</ul>
+<h2>一份可以直接抄的报告结构</h2>
+<pre><code>一、做了什么：流程名 + 触发方式 + 周期
+二、跑了多少：次数 / 成功率 / 平均耗时（近 30 天）
+三、省了什么：人工单次耗时 × 次数（用你自己的估算，写清假设）
+四、花了多少：AI token 费用（P10–P90 区间），外部调用次数单列
+五、哪里还不好：失败最多的那一步 + 下一步打算
+附件：结果导出文件 + 审计摘要包（可选）
+</code></pre>
+<p>第五节不要省。只报喜的报告没人信；把"最慢的一步"和"下一步改什么"写进去，反而更容易拿到继续投入的支持。</p>
+<h2>边界</h2>
+<ul>
+<li>费用是估算，模型调价后旧记录不会自动重算；</li>
+<li>采样不足时不要下结论（比如只有 3 次运行就谈"平均节省"）；</li>
+<li>审计包的哈希校验只能证明文件未被改动，不证明业务结论正确。</li>
+</ul>
+<p><a href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a></p>
+<p><em>本文按 v2027.1.0 功能说明撰写；预算口径与外部调用计次规则以应用内说明为准。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>
