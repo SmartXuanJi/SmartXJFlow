@@ -35,6 +35,8 @@ Get-FileHash .\SmartXJFlow_v2027.1.0.zip -Algorithm SHA256
 ## 演示视频
 
 - [表单入口与文件夹监听](https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/demo-folder-watch-feature.mp4)
+- [保存预检与运行前预检](https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/demo-preflight-check.mp4)
+- [MCP 客户端：把外部工具变成节点](https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/demo-mcp-client.mp4)
 
 ## 文章目录
 
