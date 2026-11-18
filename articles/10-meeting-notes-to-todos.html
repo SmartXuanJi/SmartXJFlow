@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议纪要转待办：从粘贴文本到结构化输出 · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="纪要里最有用的三行是「谁、做什么、什么时候」，但每次都要人从一大段话里抠出来。让模型做这件事不难，难的是格式每次一样、能直接贴进任务表。">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>会议纪要转待办：从粘贴文本到结构化输出</h1><p>纪要里最有用的三行是「谁、做什么、什么时候」，但每次都要人从一大段话里抠出来。让模型做这件事不难，难的是<strong>格式每次一样、能直接贴进任务表</strong>。</p>
+<h2>三步搭完</h2>
+<ol>
+<li><strong>输入节点</strong>：声明一个 <code>text</code> 变量，把纪要粘进去（也可以声明 <code>file</code> 类型，直接传 docx/txt）；</li>
+<li><strong>LLM 节点</strong>：提示词里固定输出列——<code>事项 / 负责人 / 截止时间 / 备注</code>，并勾选 <strong>JSON 输出</strong>，避免模型自由发挥成散文；</li>
+<li><strong>生成文件</strong>：把结构化结果渲染成 Markdown（贴群里）或 Excel（进任务表）。</li>
+</ol>
+<p>节点之间是变量传递，所以第 2 步的 JSON 字段名就是第 3 步的模板变量，改名要一起改——这也是"变量契约"存在的意义：改错会立刻在体检里报出来，而不是运行时才发现。</p>
+<h2>提示词怎么写更稳</h2>
+<pre><code>你是会议纪要整理助手。只输出 JSON，不要解释。
+字段：items[]，每项含 task / owner / due / note。
+规则：
+1) owner 未提及时填「未指定」，不要猜；
+2) due 只接受 YYYY-MM-DD 或「未指定」，不要编造日期；
+3) note 只写原文里出现过的信息；
+4) 没有可执行事项时返回 {&quot;items&quot;: []}。
+</code></pre>
+<p>三条规则对应三个常见问题：<strong>猜人</strong>、<strong>编日期</strong>、<strong>脑补细节</strong>。宁可留空，也别编。</p>
+<h2>让它可维护</h2>
+<ul>
+<li><strong>提示词版本历史</strong>：改坏了能回滚，改动可读差异；</li>
+<li><strong>结果摘要带来源</strong>：摘要里的结论强制标注来自哪段输入，方便回查；</li>
+<li><strong>样例数据试跑</strong>：先用两段脱敏纪要跑通，再换成真实内容；</li>
+<li><strong>失败可重试</strong>：LLM 节点超时或返回非法 JSON 时，重试与降级策略要显式配置，不要静默吞掉。</li>
+</ul>
+<h2>边界</h2>
+<ul>
+<li>模型会漏项。重要的是结果可核对：把原文与输出并排看，或加一条"输出条目数少于 X 时提示人工复核"的规则；</li>
+<li><strong>数据去向取决于你选的接口</strong>：用云端模型就意味着纪要会发到服务商；敏感会议要么用本地模型，要么先脱敏（人名、金额、客户名替换）；</li>
+<li>免费版可配 1 个 AI 接口、单流程 ≤10 节点，这条 3 节点流程完全够用；本地模型属专业版。</li>
+</ul>
+<h2>可以顺手加的复用</h2>
+<p>把这个流程存成模板，下次换一份纪要直接跑；或者做成<strong>批量运行</strong>，一次导入多份纪要、逐份输出待办，结果表按"文件 / 事项数 / 失败原因"分列，失败的那份单独重跑。</p>
+<p><a href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a></p>
+<p><em>本文按 v2027.1.0 功能说明撰写；提示词与样例数据均为示例，请按实际业务调整。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>

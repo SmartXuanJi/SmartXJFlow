@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>不写代码批量处理 100 个 Excel 文件：配一次，之后拖进文件夹就跑 · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="行政、财务、运营手里常有一堆结构相同、每周都要重做一遍的表。典型动作是：打开表 → 按「金额 &amp;gt; 100 且状态 = 完成」筛一遍 → 按部门汇总 → 另存为新表 → 下…">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>不写代码批量处理 100 个 Excel 文件：配一次，之后拖进文件夹就跑</h1><p>行政、财务、运营手里常有一堆结构相同、每周都要重做一遍的表。典型动作是：打开表 → 按「金额 &gt; 100 且状态 = 完成」筛一遍 → 按部门汇总 → 另存为新表 → 下一个文件。10 个文件还能忍，100 个就是一整天，而且第 37 个很容易手滑把原表覆盖了。</p>
+<p>这类工作有两个特点：<strong>规则固定</strong>、<strong>输入是一批结构相同的文件</strong>。它不需要聊天机器人，需要的是把规则固化下来，并且不破坏原文件。</p>
+<h2>做法一：一条流程处理一张表（4 个节点）</h2>
+<p>在画布上依次放 4 个表格节点（v2027.1.0 新增），不用写 Python：</p>
+<ol>
+<li><strong>读表格</strong>：选 CSV / Excel，编码自动探测（UTF-8、GBK、BOM），列名列成下拉，不用记列号。</li>
+<li><strong>筛选</strong>：条件写 <code>金额 &gt; 100</code>、<code>状态 = 完成</code>，多条件按 AND 组合。数字按数值比较（<code>100</code> 与 <code>100.0</code> 判等）。条件解析不出来会<strong>直接报错并列出当前列名</strong>，不会悄悄"不过滤"让你以为筛过了。</li>
+<li><strong>聚合</strong>：按「部门」分组统计金额合计。</li>
+<li><strong>写表格</strong>：填输出路径。<strong>默认输出新文件</strong>，目标已存在自动加 <code>(1)</code> 序号，绝不覆盖原表；要覆盖必须显式勾选。</li>
+</ol>
+<p>节点之间传的是结构化的 <code>rows / columns</code>，不是把表格拼成文本——列名里带逗号也不会变成解析 bug。按 F5 跑一次，结果页能看每一步耗时与输出，也能导出。</p>
+<h2>做法二：一批文件用「批量运行」</h2>
+<p>把多个文件当成数据集：选 CSV/XLSX → 列映射 → 逐行执行 → 结果表。结果表把<strong>成功行、失败行、失败原因</strong>分列，可以点「只重跑失败行」，不必把 100 个文件重来一遍；中途断了还能断点续跑，不重复外发、不重复扣费。批次结果自动归档（默认 90 天 / 200 条），三天后仍能在「执行记录 → 批次」里找回并导出。</p>
+<h2>做法三：连「点运行」都省掉</h2>
+<p>「批量运行 → 文件夹监听」新建规则：选文件夹、绑定流程、设文件稳定时长（等文件写完再处理，避免喂进半截文件），然后<strong>显式启用</strong>。之后丢文件进去就自动跑；成功的移到 <code>done/</code>，失败的留原地，改动后自动重试。规则默认关闭、需二次确认，不会在后台偷偷扫描磁盘。</p>
+<blockquote>
+<p>注意：文件夹监听走正式执行链路，会写执行记录并计入预算；它和不落库的「试跑」不是一回事。</p>
+</blockquote>
+<h2>免费版能跑到哪一步</h2>
+<p>上面 4 个表格节点、批量运行、文件夹监听都在<strong>免费版</strong>内。免费版限制的是数量：单流程最多 10 个节点、1 个 AI 接口、1 个定时任务、1 个 API 触发流程、1 个 MCP Server、1 个 A2A 智能体。这条 4 节点流程完全够用。</p>
+<p>只有在流程里加「让 AI 逐行改写/翻译」才需要配 1 个自己的 AI 接口（BYOK，费用与服务商直接结算）。预算只覆盖 AI token 费用，不会把外部工具调用折算成金额。</p>
+<h2>上手路径</h2>
+<p>第一次打开软件，先用场景包跑一次样例、保存为我的流程，再把自己的表换进去；卡住时先看「运行前体检」——空模型、缺接口、输入没填会给可直接点的修复按钮，而不是等运行到一半才报错。</p>
+<p>我做了个本地优先的流程编排工具用来干这类活，数据与执行记录默认留在本机，Windows 解压即用：</p>
+<p>**<a href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a></p>
+<p>（免费版可直接跑通上面的例子；首次启动 3 分钟指南：<a href="https://smartxuanji.github.io/SmartXJFlow/">发布页</a>）</p>
+<p><em>本文功能与限制以 v2027.1.0 功能说明为准；会改变存量行为的开关默认关闭。示例数据均为脱敏样例。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>

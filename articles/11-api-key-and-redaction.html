@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Key 怎么存才不会写进流程文件 · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="把 Key 写在节点配置里，导出流程给同事的那一刻就泄露了。这件事应该在工具层面被挡住，而不是靠人记着删。">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>API Key 怎么存才不会写进流程文件</h1><p>把 Key 写在节点配置里，导出流程给同事的那一刻就泄露了。这件事应该在工具层面被挡住，而不是靠人记着删。</p>
+<h2>存储：别用明文，也别只靠"配置文件权限"</h2>
+<p>基本要求是<strong>主密码 + 加密存储</strong>：Key 用 AES-256 加密后落盘，密钥由主密码经 PBKDF2 派生，应用启动时要求解锁。这样即使别人拿到配置文件，也读不出 Key。</p>
+<p>再进一步是<strong>密钥与数据分离</strong>：Key 存在凭据库，流程里只存引用；导出的流程文件里根本不含 Key，自然也就不存在"忘了删"。</p>
+<h2>导出：脱敏要递归，不能只删顶层</h2>
+<p>分享包、审计证据包、诊断包、配置备份四类导出最容易漏。要做到：</p>
+<ul>
+<li><strong>递归遍历所有键名</strong>，命中 <code>api_key / apikey / token / password / secret / access_key</code> 等键名直接置空；</li>
+<li>值里疑似密钥的字符串（长串随机字符、<code>sk-</code> 前缀等）也要处理；</li>
+<li>导出前<strong>明确告诉你脱敏了什么</strong>，而不是静默替换；</li>
+<li>治理约定（预算、敏感级别、审计级别）只导出与默认值不同的项，接收方导入时逐项确认，不静默生效。</li>
+</ul>
+<h2>分享：只读链接比"发文件"更安全</h2>
+<p>给同事看一条流程，不一定要给文件。<strong>只读分享链接</strong>的做法是：本机起一个临时 HTTP 服务 + 一次性令牌，默认 10 分钟有效、页面只读、无导入入口、没有活链接就关端口、默认仅局域网可访问。页面里只给<strong>节点结构</strong>，不含提示词、SQL、密钥与输入默认值。</p>
+<p>需要对方能改，再导出分享包；需要团队共用，用「团队模板目录」（仅局域网、服务端只读、提交需审核）。</p>
+<h2>审计：默认脱敏，包含原文要留痕</h2>
+<p>审计证据包默认不含提示词与输出原文；要带原文必须<strong>显式勾选</strong>，并且这个动作本身会被记录。操作审计日志同样不写密钥明文，只记"谁在什么时候改了哪个凭据"。</p>
+<h2>四个自查问题</h2>
+<ol>
+<li>导出一次流程，用文本编辑器搜 <code>sk-</code>、<code>token</code>，能搜到吗？</li>
+<li>分享给同事的是文件还是只读链接？</li>
+<li>审计包里能看到原始提示词吗？是谁打开的"包含原文"？</li>
+<li>换人接手时，Key 是交接凭据还是散落在聊天记录里？</li>
+</ol>
+<p>只要第 1 题答案是"能搜到"，其余都不用问了——先修导出，再谈其他。</p>
+<h2>边界</h2>
+<ul>
+<li>本地加密防的是"旁人拿到文件"，不防"拿到整机 + 主密码"；</li>
+<li>导出未加密数据时应用会显式风险告警，这不是阻止，是提醒；</li>
+<li>云模型的 Key 由你自己配置并直接与服务商结算，工具不代收、不托管；一旦把 Key 填进第三方页面，任何本地措施都失效。</li>
+</ul>
+<p><a href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a></p>
+<p><em>本文按 v2027.1.0 功能说明撰写；具体脱敏键名以应用内导出说明为准。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>

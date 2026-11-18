@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本地模型下载完却跑不起来：依赖缺失与文件不完整的排查顺序 · 玄机数据AI智能流程编排软件</title>
+<meta name="description" content="想在自己电脑上跑 GGUF / ONNX / 语音模型，试跑却只给一句英文报错——这类问题我见得最多的结论是：绝大多数「装了包还报错」不是缺依赖，而是模型文件没下完整、运行环境…">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(45,212,191,.14),transparent 60%),
+radial-gradient(800px 600px at 92% 8%,rgba(56,189,248,.12),transparent 55%),#070b14;
+color:#e8eefb;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+-webkit-font-smoothing:antialiased;line-height:1.75}
+a{color:#38bdf8;text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{border-bottom:1px solid rgba(120,160,220,.14);background:rgba(7,11,20,.7);
+backdrop-filter:blur(14px);position:sticky;top:0;z-index:9}
+.topbar .in{max-width:860px;margin:0 auto;padding:0 20px;height:56px;display:flex;
+align-items:center;justify-content:space-between;gap:16px;font-size:14px}
+.brand{font-weight:800;letter-spacing:.4px;color:#e8eefb;display:flex;align-items:center;gap:9px}
+.brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#2dd4bf,#38bdf8);
+box-shadow:0 0 14px rgba(45,212,191,.5)}
+.topnav{display:flex;gap:18px;color:#93a2bd}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px 90px}
+.paper{background:#fff;color:#1f2937;border-radius:18px;padding:44px 46px;
+box-shadow:0 30px 80px rgba(0,0,0,.45);font-size:16px}
+.paper h1{font-size:30px;line-height:1.35;margin-bottom:8px;color:#0f172a;letter-spacing:.3px}
+.paper h2{font-size:21px;margin:32px 0 12px;color:#0f172a;padding-bottom:8px;
+border-bottom:1px solid #e5e7eb}
+.paper h3{font-size:17px;margin:24px 0 10px;color:#0f172a}
+.paper p{margin:12px 0}
+.paper ul,.paper ol{margin:12px 0 12px 22px}
+.paper li{margin:6px 0}
+.paper code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;
+padding:1px 6px;font-family:Consolas,"Cascadia Code",monospace;font-size:13.5px;color:#0f766e}
+.paper pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;
+overflow:auto;margin:14px 0}
+.paper pre code{background:none;border:none;color:inherit;padding:0}
+.paper blockquote{margin:16px 0;padding:12px 16px;background:#f8fafc;
+border-left:4px solid #2dd4bf;border-radius:0 8px 8px 0;color:#334155}
+.paper table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.paper th{background:#f1f5f9;text-align:left}
+.paper th,.paper td{border:1px solid #e2e8f0;padding:8px 10px}
+.paper img{max-width:100%;border-radius:10px}
+.paper a{color:#0e7490}
+.paper hr{border:none;border-top:1px solid #e5e7eb;margin:26px 0}
+.cta{margin-top:22px;background:rgba(13,20,36,.75);border:1px solid rgba(120,160,220,.16);
+border-radius:16px;padding:24px 26px;display:flex;flex-wrap:wrap;gap:14px;
+align-items:center;justify-content:space-between}
+.cta b{font-size:15px}
+.cta span{color:#93a2bd;font-size:13px}
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-weight:800;font-size:14px;
+background:linear-gradient(135deg,#2dd4bf,#38bdf8);color:#06231f}
+.btn.ghost{background:transparent;border:1px solid rgba(120,160,220,.3);color:#cbd5e1}
+footer{max-width:860px;margin:0 auto;padding:0 20px 50px;color:#5d6b87;font-size:12.5px;
+text-align:center}
+@media(max-width:640px){.paper{padding:26px 20px}.paper h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="../index.html"><span class="dot"></span>玄机数据AI智能流程编排软件</a>
+  <div class="topnav">
+    <a href="../index.html#download">下载</a>
+    <a href="index.html">文章</a>
+    <a href="https://github.com/SmartXuanJi/SmartXJFlow" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></div>
+<div class="wrap">
+<div class="paper"><h1>本地模型下载完却跑不起来：依赖缺失与文件不完整的排查顺序</h1><p>想在自己电脑上跑 GGUF / ONNX / 语音模型，试跑却只给一句英文报错——这类问题我见得最多的结论是：<strong>绝大多数「装了包还报错」不是缺依赖</strong>，而是模型文件没下完整、运行环境缺配套包或版本元数据、或缺 ffmpeg。按下面顺序查，别一上来就重装软件。</p>
+<h2>第 1 步：这台机器到底该跑多大的模型</h2>
+<p>「本地模型」页顶部显示本机 CPU / 内存 / 独显，并给出档位建议（适配本机 / 内存可能不足 / 需要独显）。先挑模型再看跑不跑得动，是最容易踩坑的顺序：有人下完 7 GB 才发现内存不够。判不出内存时它会建议「从 7B 试起」，不劝人上大模型。</p>
+<p>在线下载支持断点续传，并会自动补齐所选规格对应的 ONNX 外部数据文件（<code>*.onnx_data</code> / <code>*.onnx.data</code>）；下完点「批量重新检测」重新识别后端与调用参数。</p>
+<h2>第 2 步：文件是不是完整的（最常见）</h2>
+<p>下载被中断时，文件可能是 0 字节、被截断，或只下到了 Git LFS 指针文本。onnxruntime 此时只抛一句 <code>No graph was found in the protobuf</code>，看起来像「缺依赖」，实际是文件里根本没有计算图。</p>
+<p>处理：重新下载该模型；扫描阶段也会把不完整模型标成不可用并写明「请重新下载」，不用等试听失败才发现。如果重新下载后仍一样，考虑是不是把别的架构权重放进了该目录，换一个模型验证。</p>
+<h2>第 3 步：是「缺包」，还是「缺包的元数据」</h2>
+<p>运行时依赖按需下载到应用 <code>extensions/</code>，不污染系统 Python。为了不把 numpy / torch 这类基础库重复复制进来，安装走的是「只装主包 + 按需补配套依赖」，于是有两类不同报错：</p>
+<ul>
+<li><code>No module named 'diskcache'</code>：确实缺配套包 → 在失败提示点「自动安装」，按主依赖一次性补齐，装完自动重试；已能导入的包不重复下载。</li>
+<li><code>The 'requests' distribution was not found</code> / <code>No package metadata was found for ...</code>：模块在，但发行包元数据（dist-info）不在。运行时会补一份最小元数据后重试导入；仍失败时提示会点名真正缺的包并给「自动安装」入口。</li>
+<li><code>No module named 'pickletools'</code>：看着像包名，其实是 <strong>Python 标准库</strong>，pip 装不出来。界面会说明「这是安装包缺少该模块，请更新版本」，不会让你反复点自动安装。</li>
+</ul>
+<p>还有一类嵌套报错 <code>Could not import module 'CLIPTextModel'</code>，来自 transformers 的懒加载，真实原因被包了两层。现在的提示会把原始错误链一起列出来；看到这条别急着重装 diffusers，先读「原始错误」那一行。</p>
+<h2>第 4 步：音频场景检查 ffmpeg</h2>
+<p>语音识别的音频转码、解码需要 ffmpeg，安装包不随附（体积较大）。「本地模型」页有常驻的「下载 ffmpeg」按钮，缺它时显示、装好后自动收起；下载到应用 <code>resources/bin</code>，免安装、不需要管理员权限、不改系统环境变量。缺 ffmpeg 的报错不会再被回退链路伪装成「未安装语音识别库」。</p>
+<h2>第 5 步：还不行，就导出诊断包</h2>
+<p>「帮助 → 导出诊断包」会把主日志、错误日志、审计日志与环境摘要打包（逐行脱敏、单份最多 5000 行）。把它和界面显示的原始错误一起发给支持邮箱，比截图一句英文报错有用得多。</p>
+<h2>事实边界（写文案和答问时都要带上）</h2>
+<p>本地模型、依赖包与 ffmpeg 都是<strong>按需下载、不随安装包分发</strong>的组件，体积从几十 MB 到数 GB 不等；离线/内网机器需事先在有网环境准备好再导入。国内下载优先走国内镜像，GitHub 资源优先走加速镜像，并对文件做 SHA-256 校验，不完整会当场判失败而不是装出半截包。本地模型能力属专业版；免费版仍可用表格、文件、代码等节点。</p>
+<p>想从最简单的路径开始，先看「首次启动 3 分钟跑通」；不装本地模型也能完成的工作，看「批量处理 Excel」。</p>
+<p>工具主页：<a href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a></p>
+<p><em>本文按 v2027.1.0 功能说明撰写；具体菜单以应用内显示为准。</em></p></div><div class="cta"><div><b>想把这类流程跑在自己的机器上？</b><br><span>Windows 10 / 11 解压即用，流程与数据默认留在本机</span></div><div><a class="btn" href="https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip">下载 v2027.1.0</a> <a class="btn ghost" href="index.html">更多文章</a></div></div>
+</div>
+<footer>
+  本文由开发者本人撰写 · 反馈 support@smartxuanji.cn
+</footer>
+</body>
+</html>
