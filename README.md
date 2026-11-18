@@ -34,8 +34,7 @@ Get-FileHash .\SmartXJFlow_v2027.1.0.zip -Algorithm SHA256
 
 ## 演示视频
 
-- [表单入口与文件夹监听](https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/demo-form-folder-watch.mp4)
-- [文件夹监听功能](https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/demo-folder-watch-feature.mp4)
+- [表单入口与文件夹监听](https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/demo-folder-watch-feature.mp4)
 
 ## 文章目录
 
