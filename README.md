@@ -11,11 +11,11 @@
 
 | 项目 | 内容 |
 |---|---|
-| 安装包 | `SmartXJFlow_v2027.1.0.zip`（234.5 MB） |
+| 安装包 | `SmartXJFlow_v2027.1.0.zip`（235.1 MB） |
 | 直链 | https://github.com/SmartXuanJi/SmartXJFlow/releases/download/v2027.1.0/SmartXJFlow_v2027.1.0.zip |
 | 全部版本 | https://github.com/SmartXuanJi/SmartXJFlow/releases |
 | 平台 | Windows 10 / 11（64 位），解压即用，无需 Python 环境 |
-| SHA-256 | `0da1d9729e90268448790844f2faef231704ad5fdd60466fea9097bed3cb1bb5` |
+| SHA-256 | `860fd01fff6079e9126e250edd6a30f1218e4d22227cd330aa14e4edd43d2483` |
 
 下载后建议核对校验值（PowerShell）：
 
